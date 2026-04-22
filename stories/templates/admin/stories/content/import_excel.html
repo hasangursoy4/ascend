@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<div style="max-width: 600px; margin: 30px auto; padding: 30px; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
+    <h1 style="font-size: 20px; margin-bottom: 20px; color: #2f3e57;">📥 Excel'den İçerik Yükle</h1>
+
+    <div style="background: #e8f4f8; padding: 16px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; color: #444;">
+        <strong>Excel dosyan şu sayfaları içermeli:</strong><br><br>
+        📋 <strong>İçerikler</strong> — başlık, kategori, tür, yıl, puan...<br>
+        📝 <strong>Metinler</strong> — içerik adı, seviye, İngilizce metin, Türkçe metin<br>
+        📚 <strong>Vocabulary</strong> — içerik adı, seviye, kelime, tür, anlam, örnek<br>
+        🎭 <strong>Oyuncular</strong> — içerik adı, oyuncu, rol, foto URL, sıra<br><br>
+        <strong>İpucu:</strong> Önce mevcut içerikleri export et, aynı formatta doldur, import et!
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="margin-bottom: 16px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 8px;">Excel Dosyası (.xlsx)</label>
+            <input type="file" name="excel_file" accept=".xlsx" required
+                style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+        </div>
+        <button type="submit"
+            style="padding: 10px 28px; background: #2f3e57; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 15px;">
+            📤 Yükle
+        </button>
+        <a href="../" style="margin-left: 16px; color: #666; font-size: 14px;">İptal</a>
+    </form>
+</div>
+{% endblock %}

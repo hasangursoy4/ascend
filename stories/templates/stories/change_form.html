@@ -1,0 +1,27 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block after_related_objects %}
+{{ block.super }}
+
+{% if quick_vocab_form %}
+<div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px;">
+    <h2 style="font-size: 16px; margin-bottom: 8px; color: #333;">⚡ Hızlı Kelime Girişi</h2>
+    <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+        Her satıra bir kelime girin: <code>kelime | tür | anlam | örnek cümle</code>
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        {{ quick_vocab_form.bulk_vocab }}
+        <br>
+        <input type="submit" name="bulk_vocab_submit" value="✅ Kelimeleri Ekle"
+            style="margin-top: 10px; padding: 8px 20px; background: #2f3e57; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+    </form>
+    <p style="margin-top: 10px; font-size: 12px; color: #888;">
+        Örnek:<br>
+        <code>chemistry | N. | Kimya | He is a chemistry teacher.</code><br>
+        <code>difficult | ADJ. | Zor | His life is very difficult.</code>
+    </p>
+</div>
+{% endif %}
+{% endblock %}

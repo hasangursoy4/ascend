@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category_label }} | ASCEND</title>
+    <link rel="stylesheet" href="{% static 'stories/style.css' %}?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="hero-section detail-header">
+    <div class="header-top">
+        <a href="/" class="site-logo">
+            <img src="{% static 'stories/images/logo.png' %}" alt="Ascend Logo">
+            <h1 class="logo-text">ASCEND</h1>
+        </a>
+        <div class="theme-switch-container">
+            <svg class="theme-icon sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input type="checkbox" id="theme-checkbox" class="theme-checkbox">
+            <label for="theme-checkbox" class="theme-label">
+                <span class="ball"></span>
+            </label>
+            <svg class="theme-icon moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </div>
+    </div>
+</header>
+
+<section class="catalog-container">
+    <div class="section-title-wrapper">
+        <h2 class="category-title">{{ category_label }}</h2>
+    </div>
+
+    <nav class="category-nav">
+        <a href="/" class="cat-btn">Anasayfa</a>
+        <a href="{% url 'diziler' %}" class="cat-btn {% if category == 'series' %}active{% endif %}">Dizi</a>
+        <a href="{% url 'filmler' %}" class="cat-btn {% if category == 'movie' %}active{% endif %}">Film</a>
+        <a href="{% url 'animasyon' %}" class="cat-btn {% if category == 'animation' %}active{% endif %}">Animasyon</a>
+        <a href="{% url 'oyunlar' %}" class="cat-btn {% if category == 'game' %}active{% endif %}">Oyun</a>
+    </nav>
+
+    <main class="story-grid">
+        {% for item in contents %}
+        <article class="story-card">
+            <a href="{% url 'story_detail' item.id %}" class="card-link">
+                <div class="poster-wrapper">
+                    <span class="rating-badge">{% if item.rating %}⭐ {{ item.rating }}{% endif %}</span>
+                    <img src="{{ item.poster_url }}" alt="{{ item.title }}" loading="lazy">
+                </div>
+                <div class="story-details">
+                    <h3 class="gold-title">{{ item.title }}</h3>
+                    <div class="meta-info">
+                        <span class="type-text">{{ item.get_category_display }}</span>
+                        <span class="dot-separator">•</span>
+                        <span class="level-indicator">{{ item.genre|default:"—" }}</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+        {% empty %}
+        <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 100px 0;">
+            <p style="color: var(--muted); font-size: 1.2rem;">Bu kategoride henüz içerik bulunmuyor.</p>
+        </div>
+        {% endfor %}
+    </main>
+</section>
+
+<footer class="footer-simple">
+    <p>&copy; 2026 Ascend — Elevate Your Narrative.</p>
+</footer>
+
+<script src="{% static 'stories/script.js' %}"></script>
+</body>
+</html>
