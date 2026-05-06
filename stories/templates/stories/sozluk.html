@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sözlük | ASCEND</title>
+    <link rel="stylesheet" href="{% static 'stories/style.css' %}?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="hero-section detail-header">
+    <div class="header-top">
+        <a href="/" class="site-logo">
+            <img src="{% static 'stories/images/logo.png' %}" alt="Ascend Logo">
+            <h1 class="logo-text">ASCEND</h1>
+        </a>
+        <nav class="detail-nav">
+            <a href="/" class="detail-nav-btn">Anasayfa</a>
+            <a href="{% url 'diziler' %}" class="detail-nav-btn">Dizi</a>
+            <a href="{% url 'filmler' %}" class="detail-nav-btn">Film</a>
+            <a href="{% url 'animasyon' %}" class="detail-nav-btn">Animasyon</a>
+            <a href="{% url 'oyunlar' %}" class="detail-nav-btn">Oyun</a>
+            <a href="{% url 'sozluk' %}" class="detail-nav-btn active">Sözlük</a>
+        </nav>
+        <div class="theme-switch-container">
+            <!-- Tema ikonları aynı kalıyor -->
+            <input type="checkbox" id="theme-checkbox" class="theme-checkbox">
+            <label for="theme-checkbox" class="theme-label"><span class="ball"></span></label>
+        </div>
+    </div>
+</header>
+
+<section class="sozluk-container">
+    <div class="sozluk-hero">
+        <h2 class="sozluk-title">SÖZLÜK</h2>
+        <p class="sozluk-subtitle">{{ words.paginator.count }} kelime listeleniyor</p>
+
+        <form method="get" class="sozluk-filters">
+            <div class="sozluk-search-wrap">
+                <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Kelime ara..." class="sozluk-search" autocomplete="off">
+            </div>
+            <div class="sozluk-filter-row">
+                <select name="level" class="filter-select">
+                    <option value="">Tüm Seviyeler</option>
+                    <option value="A1" {% if selected_level == "A1" %}selected{% endif %}>A1</option>
+                    <option value="A2" {% if selected_level == "A2" %}selected{% endif %}>A2</option>
+                    <option value="B1" {% if selected_level == "B1" %}selected{% endif %}>B1</option>
+                    <option value="B2" {% if selected_level == "B2" %}selected{% endif %}>B2</option>
+                    <option value="C1" {% if selected_level == "C1" %}selected{% endif %}>C1</option>
+                    <option value="C2" {% if selected_level == "C2" %}selected{% endif %}>C2</option>
+                </select>
+                <select name="type" class="filter-select">
+                    <option value="">Tüm Türler</option>
+                    <option value="noun" {% if selected_type == "noun" %}selected{% endif %}>Noun</option>
+                    <option value="verb" {% if selected_type == "verb" %}selected{% endif %}>Verb</option>
+                    <option value="adjective" {% if selected_type == "adjective" %}selected{% endif %}>Adjective</option>
+                    <option value="adverb" {% if selected_type == "adverb" %}selected{% endif %}>Adverb</option>
+                </select>
+                <button type="submit" class="filter-btn">Filtrele</button>
+                {% if query or selected_level or selected_type %}
+                    <a href="{% url 'sozluk' %}" class="filter-clear">Temizle</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <div class="dict-grid">
+        {% for w in words %}
+        <div class="dict-card" 
+             data-word="{{ w.word|default:'' }}" 
+             data-type="{{ w.word_type|default:'' }}" 
+             data-level="{{ w.level|default:'' }}" 
+             data-phonetic="{{ w.phonetic|default:'' }}" 
+             data-meaning="{{ w.meaning_tr|default:'' }}" 
+             data-def="{{ w.definition_en|default:'' }}" 
+             data-example="{{ w.example_sentence|default:'' }}">
+            
+            <div class="dict-word-row">
+                <span class="dict-word">{{ w.word }}</span>
+                {% if w.word_type %}<span class="word-type">{{ w.word_type }}</span>{% endif %}
+                {% if w.level %}<span class="dict-level-badge">{{ w.level }}</span>{% endif %}
+            </div>
+            {% if w.phonetic %}<span class="dict-phonetic">{{ w.phonetic }}</span>{% endif %}
+            <span class="dict-meaning">{{ w.meaning_tr }}</span>
+        </div>
+        {% empty %}
+        <div class="dict-empty" style="grid-column: 1/-1; text-align: center; padding: 40px;">
+            <p>Sonuç bulunamadı.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- SAYFALAMA BUTONLARI BURADA -->
+    {% if words.has_other_pages %}
+    <div class="pagination-container" style="text-align: center; margin: 40px 0;">
+        <div class="pagination">
+            {% if words.has_previous %}
+                <a href="?page={{ words.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_level %}&level={{ selected_level }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" class="detail-nav-btn">Geri</a>
+            {% endif %}
+
+            <span style="margin: 0 15px; font-weight: 600;">Sayfa {{ words.number }} / {{ words.paginator.num_pages }}</span>
+
+            {% if words.has_next %}
+                <a href="?page={{ words.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if selected_level %}&level={{ selected_level }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" class="detail-nav-btn">İleri</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</section>
+
+<footer class="footer-simple">
+    <p>&copy; 2026 Ascend — Elevate Your Narrative.</p>
+</footer>
+
+<script src="{% static 'stories/script.js' %}"></script>
+
+<!-- MODAL BÖLÜMÜ -->
+<div class="dict-modal-overlay" id="dict-modal-overlay">
+    <div class="dict-modal" id="dict-modal">
+        <button class="dict-modal-close" id="dict-modal-close">✕</button>
+        <div class="dict-modal-word-row">
+            <span class="dict-modal-word" id="modal-word"></span>
+            <span class="word-type" id="modal-type"></span>
+            <span class="dict-level-badge" id="modal-level"></span>
+        </div>
+        <span class="dict-modal-phonetic" id="modal-phonetic"></span>
+        <span class="dict-modal-meaning" id="modal-meaning"></span>
+        <hr class="dict-modal-divider">
+        <p class="dict-modal-def" id="modal-def"></p>
+        <p class="dict-modal-example" id="modal-example"></p>
+    </div>
+</div>
+
+</body>
+</html>

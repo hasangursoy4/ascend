@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ content.title }} | ASCEND</title>
+
+    <link rel="stylesheet" href="{% static 'stories/style.css' %}?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="hero-section detail-header">
+    <div class="header-top">
+        <a href="/" class="site-logo">
+            <img src="{% static 'stories/images/logo.png' %}" alt="Ascend Logo">
+            <h1 class="logo-text">ASCEND</h1>
+        </a>
+
+        <nav class="detail-nav">
+            <a href="/" class="detail-nav-btn">Anasayfa</a>
+            <a href="{% url 'diziler' %}" class="detail-nav-btn {% if content.category == 'series' %}active{% endif %}">Dizi</a>
+            <a href="{% url 'filmler' %}" class="detail-nav-btn {% if content.category == 'movie' %}active{% endif %}">Film</a>
+            <a href="{% url 'animasyon' %}" class="detail-nav-btn {% if content.category == 'animation' %}active{% endif %}">Animasyon</a>
+            <a href="{% url 'oyunlar' %}" class="detail-nav-btn {% if content.category == 'game' %}active{% endif %}">Oyun</a>
+            <a href="{% url 'sozluk' %}" class="detail-nav-btn {% if content.category == 'dictionary' %}active{% endif %}">Sözlük</a>
+
+        </nav>
+
+        <div class="theme-switch-container">
+            <svg class="theme-icon sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input type="checkbox" id="theme-checkbox" class="theme-checkbox">
+            <label for="theme-checkbox" class="theme-label">
+                <span class="ball"></span>
+            </label>
+            <svg class="theme-icon moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="detail-layout">
+
+    <!-- LEFT -->
+    <aside class="sidebar">
+
+        <div class="poster-card">
+            <img src="{{ content.poster_url }}" class="main-poster-detail">
+        </div>
+
+        <div class="level-box">
+            <p class="level-title">LEVEL</p>
+            <div class="level-grid">
+                <a href="?ver=A1" class="level-btn-detail {% if current_level == 'A1' %}active{% endif %}">A1</a>
+                <a href="?ver=A2" class="level-btn-detail {% if current_level == 'A2' %}active{% endif %}">A2</a>
+                <a href="?ver=B1" class="level-btn-detail {% if current_level == 'B1' %}active{% endif %}">B1</a>
+                <a href="?ver=B2" class="level-btn-detail {% if current_level == 'B2' %}active{% endif %}">B2</a>
+                <a href="?ver=C1" class="level-btn-detail {% if current_level == 'C1' %}active{% endif %}">C1</a>
+                <a href="?ver=C2" class="level-btn-detail {% if current_level == 'C2' %}active{% endif %}">C2</a>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- RIGHT -->
+    <section class="content-area">
+
+        <div class="content-header">
+            <h2 class="premium-title">{{ content.title }}</h2>
+            <div class="meta">
+                {% if content.category == 'series' %}
+                    <a href="{% url 'diziler' %}" class="badge category-link">{{ content.get_category_display }}</a>
+                {% elif content.category == 'movie' %}
+                    <a href="{% url 'filmler' %}" class="badge category-link">{{ content.get_category_display }}</a>
+                {% elif content.category == 'animation' %}
+                    <a href="{% url 'animasyon' %}" class="badge category-link">{{ content.get_category_display }}</a>
+                {% elif content.category == 'game' %}
+                    <a href="{% url 'oyunlar' %}" class="badge category-link">{{ content.get_category_display }}</a>
+                {% endif %}
+
+                <div class="level-badge-wrapper">
+                    <span class="badge level" id="level-badge">{{ current_level }} ▾</span>
+                    <div class="level-popup" id="level-popup">
+                        <p class="popup-title">Seviye Seç</p>
+                        {% for lvl in levels %}
+                        <a href="?ver={{ lvl }}" class="popup-option {% if lvl == current_level %}active{% endif %}">
+                            <span class="popup-lvl">{{ lvl }}</span>
+                            <span class="popup-desc">
+                                {% if lvl == 'A1' %}Başlangıç
+                                {% elif lvl == 'A2' %}Temel
+                                {% elif lvl == 'B1' %}Orta Öncesi
+                                {% elif lvl == 'B2' %}Orta
+                                {% elif lvl == 'C1' %}İleri
+                                {% elif lvl == 'C2' %}Uzman{% endif %}
+                            </span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCTION INFO -->
+            {% if content.year or content.director or content.cast or content.developer or content.studio %}
+            <div class="production-inline">
+                <div class="production-grid">
+                    {% if content.year %}
+                    <div class="prod-item">
+                        <span class="prod-label">Yıl</span>
+                        <span class="prod-value">{{ content.year }}</span>
+                    </div>
+                    {% endif %}
+                    {% if content.rating %}
+                    <div class="prod-item">
+                        <span class="prod-label">Puan</span>
+                        <span class="prod-value">⭐ {{ content.rating }}</span>
+                    </div>
+                    {% endif %}
+                    {% if content.category == 'series' and content.season_count %}
+                    <div class="prod-item">
+                        <span class="prod-label">Sezon</span>
+                        <span class="prod-value">{{ content.season_count }}</span>
+                    </div>
+                    {% endif %}
+                    {% if content.category == 'movie' and content.duration %}
+                    <div class="prod-item">
+                        <span class="prod-label">Süre</span>
+                        <span class="prod-value">{{ content.duration }}</span>
+                    </div>
+                    {% endif %}
+                    {% if content.category == 'game' and content.developer %}
+                    <div class="prod-item">
+                        <span class="prod-label">Geliştirici</span>
+                        <span class="prod-value">{{ content.developer }}</span>
+                    </div>
+                    {% endif %}
+                    {% if content.category == 'animation' and content.studio %}
+                    <div class="prod-item">
+                        <span class="prod-label">Stüdyo</span>
+                        <span class="prod-value">{{ content.studio }}</span>
+                    </div>
+                    {% endif %}
+                    {% if content.director and content.category != 'game' %}
+                    <div class="prod-item">
+                        <span class="prod-label">Yönetmen</span>
+                        <span class="prod-value">{{ content.director }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <div class="text-card">
+            {% if selected_version %}
+                <div class="lang-block">
+                    <h4>🇬🇧 English</h4>
+                    <p>{% autoescape off %}{{ highlighted_en }}{% endautoescape %}</p>
+                </div>
+                <div class="lang-block tr">
+                    <h4>🇹🇷 Türkçe</h4>
+                    <p>{{ selected_version.text_tr }}</p>
+                </div>
+            {% else %}
+                <p class="empty">Bu seviyede içerik yok.</p>
+            {% endif %}
+        </div>
+
+    </section>
+
+</main>
+
+<!-- CAST SECTION -->
+{% if content.cast_members.all and content.category != 'game' %}
+<section class="cast-section">
+    <div class="container">
+        <h3 class="cast-section-title">Oyuncular</h3>
+        <div class="cast-grid">
+            {% for actor in content.cast_members.all %}
+            <div class="cast-card">
+                {% if actor.photo_url %}
+                <img src="{{ actor.photo_url }}" alt="{{ actor.name }}" class="cast-photo">
+                {% else %}
+                <div class="cast-photo cast-no-photo">{{ actor.name|first }}</div>
+                {% endif %}
+                <span class="cast-name">{{ actor.name }}</span>
+                {% if actor.role %}<span class="cast-role">{{ actor.role }}</span>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- VOCAB -->
+<section class="vocab-section">
+    <div class="container">
+        <h3 class="vocab-title">Essential Vocabulary</h3>
+        <div class="vocab-grid">
+            {% for vocab in selected_version.vocabularies.all %}
+            <div class="vocab-card" data-word="{{ vocab.word|lower }}">
+                <div class="word-header">
+                    <span class="word-main">{{ vocab.word }}</span>
+                    <span class="word-type">{{ vocab.word_type }}</span>
+                </div>
+                <span class="word-meaning">{{ vocab.meaning }}</span>
+                <p class="word-example">{{ vocab.example_sentence }}</p>
+            </div>
+            {% for dw in dict_matches %}
+<div class="vocab-card" data-word="{{ dw.word|lower }}">
+    <div class="word-header">
+        <span class="word-main">{{ dw.word }}</span>
+        <span class="word-type">{{ dw.word_type }}</span>
+    </div>
+    <span class="word-meaning">{{ dw.meaning_tr }}</span>
+    {% if dw.example_sentence %}
+    <p class="word-example">{{ dw.example_sentence }}</p>
+    {% endif %}
+</div>
+{% endfor %}
+            {% empty %}
+                <p class="empty">Henüz kelime yok.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'stories/script.js' %}"></script>
+
+</body>
+</html>

@@ -31,9 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SAYFA GEÇİŞ ANİMASYONU
     document.querySelectorAll('a[href]').forEach(link => {
         const href = link.getAttribute('href');
-        // Sadece iç linklere uygula, # anchor ve javascript: linklerine değil
         if (!href || href.startsWith('#') || href.startsWith('javascript') || href.startsWith('mailto')) return;
-        // Yeni sekmede açılanları atla
         if (link.target === '_blank') return;
 
         link.addEventListener('click', (e) => {
@@ -65,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (levelBadge && levelPopup) {
         levelBadge.addEventListener('click', (e) => {
             e.stopPropagation();
-            e.preventDefault(); // fade-out tetiklenmesin
+            e.preventDefault();
             levelPopup.classList.toggle('visible');
         });
 
@@ -125,4 +123,53 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // SÖZLÜK MODAL
+    document.querySelectorAll('.dict-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const overlay = document.getElementById('dict-modal-overlay');
+            if (!overlay) return;
+
+            document.getElementById('modal-word').textContent = card.dataset.word || '';
+            document.getElementById('modal-type').textContent = card.dataset.type || '';
+            document.getElementById('modal-level').textContent = card.dataset.level || '';
+            document.getElementById('modal-phonetic').textContent = card.dataset.phonetic || '';
+            document.getElementById('modal-meaning').textContent = card.dataset.meaning || '';
+            document.getElementById('modal-def').textContent = card.dataset.def || '';
+            document.getElementById('modal-example').textContent = card.dataset.example || '';
+
+            overlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    const dictModalClose = document.getElementById('dict-modal-close');
+    const dictModalOverlay = document.getElementById('dict-modal-overlay');
+
+    if (dictModalClose) {
+        dictModalClose.addEventListener('click', closeDictModal);
+    }
+
+    if (dictModalOverlay) {
+        dictModalOverlay.addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeDictModal();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeDictModal();
+            // level popup da kapat
+            if (levelPopup) levelPopup.classList.remove('visible');
+        }
+    });
+
 });
+
+function closeDictModal() {
+    const overlay = document.getElementById('dict-modal-overlay');
+    if (overlay) {
+        overlay.classList.remove('visible');
+        document.body.style.overflow = '';
+    }
+}
