@@ -7,7 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 2. GÜVENLİK AYARLARI
 SECRET_KEY = 'django-insecure-test-key'
 DEBUG = True
-ALLOWED_HOSTS = []
+
+# BURAYI GÜNCELLEDİM:
+ALLOWED_HOSTS = ['ascend.hasanbugragursoy.com', '.railway.app', 'localhost', '127.0.0.1']
 
 # 3. UYGULAMALAR
 INSTALLED_APPS = [
@@ -23,6 +25,7 @@ INSTALLED_APPS = [
 # 4. ARA KATMANLAR
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Statik dosyalar için bunu ekledim
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -33,7 +36,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ascent_web.urls'
 
-# 5. ŞABLONLAR (HTML DOSYALARI)
+# 5. ŞABLONLAR
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -57,17 +60,16 @@ DATABASES = {
     }
 }
 
-# 7. STATİK DOSYA AYARLARI (TEK VE NET)
+# 7. STATİK DOSYA AYARLARI
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'stories' / 'static',
-]
-
+STATICFILES_DIRS = [BASE_DIR / 'stories' / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# 8. MEDYA DOSYALARI (RESİMLER İÇİN)
+# 8. MEDYA DOSYALARI
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Railway/Vercel Güvenlik Ayarı
+CSRF_TRUSTED_ORIGINS = ['https://ascend.hasanbugragursoy.com']
