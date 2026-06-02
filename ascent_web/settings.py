@@ -5,11 +5,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 2. GÜVENLİK AYARLARI
-SECRET_KEY = 'django-insecure-test-key'
-DEBUG = True
-
-# BURAYI GÜNCELLEDİM:
-ALLOWED_HOSTS = ['ascend.hasanbugragursoy.com', '.railway.app', 'localhost', '127.0.0.1']
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-test-key')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = ['ascend-site.onrender.com', 'ascend.hasanbugragursoy.com', 'localhost', '127.0.0.1']
 
 # 3. UYGULAMALAR
 INSTALLED_APPS = [
@@ -25,7 +23,7 @@ INSTALLED_APPS = [
 # 4. ARA KATMANLAR
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Statik dosyalar için bunu ekledim
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,17 +51,18 @@ TEMPLATES = [
 ]
 
 # 6. VERİTABANI
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+    )
 }
 
 # 7. STATİK DOSYA AYARLARI
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'stories' / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # 8. MEDYA DOSYALARI
 MEDIA_URL = '/media/'
@@ -71,5 +70,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Railway/Vercel Güvenlik Ayarı
-CSRF_TRUSTED_ORIGINS = ['https://ascend.hasanbugragursoy.com']
+# Güvenlik
+CSRF_TRUSTED_ORIGINS = [
+    'https://ascend-site.onrender.com',
+    'https://ascend.hasanbugragursoy.com',
+]
