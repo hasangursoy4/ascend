@@ -61,7 +61,7 @@ DATABASES = {
 # 7. STATİK DOSYA AYARLARI
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'stories' / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # 8. MEDYA DOSYALARI
