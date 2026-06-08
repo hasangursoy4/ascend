@@ -46,7 +46,7 @@ DATABASES = {
 }
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'stories' / 'static']
-STATIC_ROOT = BASE_DIR / 'source' / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
