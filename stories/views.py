@@ -1,5 +1,7 @@
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
-from .models import Content
+from .models import Content, DictionaryWord
 import re
 
 CATEGORY_LABELS = {
@@ -24,6 +26,37 @@ def category_page(request, category):
         'contents': contents,
         'category': category,
         'category_label': label,
+    })
+
+def sozluk(request):
+    query = request.GET.get('q', '').strip()
+    selected_level = request.GET.get('level', '').strip()
+    selected_type = request.GET.get('type', '').strip()
+
+    words = DictionaryWord.objects.all()
+
+    if query:
+        words = words.filter(
+            Q(word__icontains=query) |
+            Q(meaning_tr__icontains=query) |
+            Q(definition_en__icontains=query)
+        )
+
+    if selected_level:
+        words = words.filter(level=selected_level)
+
+    if selected_type:
+        words = words.filter(word_type__icontains=selected_type)
+
+    paginator = Paginator(words, 36)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'stories/sozluk.html', {
+        'words': page_obj,
+        'query': query,
+        'selected_level': selected_level,
+        'selected_type': selected_type,
     })
 
 def story_detail(request, story_id):
