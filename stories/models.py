@@ -66,3 +66,21 @@ class Vocabulary(models.Model):
 
     def __str__(self):
         return f"{self.word} ({self.version.content.title} - {self.version.level})"
+
+
+class DictionaryWord(models.Model):
+    LEVEL_CHOICES = StoryVersion.LEVEL_CHOICES
+
+    word = models.CharField(max_length=100, unique=True, verbose_name="Kelime")
+    word_type = models.CharField(max_length=50, blank=True, verbose_name="Kelime Turu")
+    meaning_tr = models.CharField(max_length=300, blank=True, verbose_name="Turkce Anlam")
+    definition_en = models.TextField(blank=True, verbose_name="Ingilizce Tanim")
+    example_sentence = models.TextField(blank=True, verbose_name="Ornek Cumle")
+    level = models.CharField(max_length=5, choices=LEVEL_CHOICES, blank=True, verbose_name="Seviye")
+    phonetic = models.CharField(max_length=100, blank=True, verbose_name="Telaffuz")
+
+    class Meta:
+        ordering = ['word']
+
+    def __str__(self):
+        return self.word
