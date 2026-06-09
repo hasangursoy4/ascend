@@ -125,4 +125,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // DICTIONARY MODAL
+    const dictOverlay = document.getElementById('dict-modal-overlay');
+    const dictClose = document.getElementById('dict-modal-close');
+
+    if (dictOverlay && dictClose) {
+        const modalFields = {
+            word: document.getElementById('modal-word'),
+            type: document.getElementById('modal-type'),
+            level: document.getElementById('modal-level'),
+            phonetic: document.getElementById('modal-phonetic'),
+            meaning: document.getElementById('modal-meaning'),
+            def: document.getElementById('modal-def'),
+            example: document.getElementById('modal-example'),
+        };
+
+        document.querySelectorAll('.dict-card').forEach(card => {
+            card.addEventListener('click', () => {
+                Object.entries(modalFields).forEach(([key, el]) => {
+                    if (!el) return;
+                    const value = card.dataset[key] || '';
+                    el.textContent = value;
+                    el.style.display = value ? '' : 'none';
+                });
+                dictOverlay.classList.add('visible');
+                document.body.classList.add('modal-open');
+            });
+        });
+
+        const closeDictionaryModal = () => {
+            dictOverlay.classList.remove('visible');
+            document.body.classList.remove('modal-open');
+        };
+
+        dictClose.addEventListener('click', closeDictionaryModal);
+        dictOverlay.addEventListener('click', (event) => {
+            if (event.target === dictOverlay) closeDictionaryModal();
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeDictionaryModal();
+        });
+    }
 });
