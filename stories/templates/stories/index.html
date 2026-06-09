@@ -64,6 +64,7 @@
     <a href="/?level=movie" class="cat-btn {% if request.GET.level == 'movie' %}active{% endif %}">Film</a>
     <a href="/?level=animation" class="cat-btn {% if request.GET.level == 'animation' %}active{% endif %}">Animasyon</a>
     <a href="/?level=game" class="cat-btn {% if request.GET.level == 'game' %}active{% endif %}">Oyun</a>
+    <a href="{% url 'sozluk' %}" class="cat-btn">Sözlük</a>
 </nav>
 
         <main class="story-grid">
