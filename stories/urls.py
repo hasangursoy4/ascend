@@ -8,4 +8,5 @@ urlpatterns = [
     path('filmler/', views.category_page, {'category': 'movie'}, name='filmler'),
     path('animasyon/', views.category_page, {'category': 'animation'}, name='animasyon'),
     path('oyunlar/', views.category_page, {'category': 'game'}, name='oyunlar'),
+    path('sozluk/', views.sozluk, name='sozluk'),
 ]
