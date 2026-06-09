@@ -1130,3 +1130,255 @@ body.dark-mode .word-type {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================
+   DICTIONARY PAGE
+   ============================================ */
+.sozluk-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+}
+
+.sozluk-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 34px;
+    text-align: center;
+}
+
+.sozluk-title {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text);
+}
+
+.sozluk-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.sozluk-filters {
+    width: min(760px, 100%);
+    display: grid;
+    gap: 12px;
+}
+
+.sozluk-search,
+.filter-select {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 13px 14px;
+    font: inherit;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sozluk-search:focus,
+.filter-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.18);
+}
+
+.sozluk-filter-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.filter-btn,
+.filter-clear {
+    min-height: 46px;
+    border-radius: 8px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    background: var(--text);
+    color: var(--bg);
+    font: inherit;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.filter-clear {
+    background: var(--card);
+    color: var(--text);
+}
+
+.dict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.dict-card {
+    min-height: 146px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.dict-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+}
+
+.dict-word-row,
+.dict-modal-word-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.dict-word,
+.dict-modal-word {
+    color: var(--text);
+    font-size: 1.18rem;
+    font-weight: 800;
+}
+
+.dict-level-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: rgba(201, 168, 76, 0.18);
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.dict-phonetic,
+.dict-modal-phonetic {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.dict-meaning,
+.dict-modal-meaning {
+    display: block;
+    margin-top: 14px;
+    color: var(--text);
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.dict-empty {
+    color: var(--muted);
+}
+
+.pagination {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: var(--text);
+}
+
+.dict-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(8, 10, 14, 0.58);
+    backdrop-filter: blur(8px);
+}
+
+.dict-modal-overlay.visible {
+    display: flex;
+}
+
+.dict-modal {
+    position: relative;
+    width: min(560px, 100%);
+    max-height: min(720px, 88vh);
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text);
+    padding: 28px;
+    box-shadow: var(--shadow-lg);
+}
+
+.dict-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-alt);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.dict-modal-divider {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+}
+
+.dict-modal-def,
+.dict-modal-example {
+    margin: 0 0 14px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.dict-modal-example {
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    font-style: italic;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 720px) {
+    .sozluk-container {
+        padding: 32px 18px 64px;
+    }
+
+    .sozluk-filter-row {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-btn,
+    .filter-clear {
+        width: 100%;
+    }
+
+    .dict-grid {
+        grid-template-columns: 1fr;
+    }
+}
