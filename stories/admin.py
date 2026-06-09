@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.contrib import messages
 from django.http import HttpResponse
-from .models import Content, StoryVersion, Vocabulary, CastMember
+from .models import Content, StoryVersion, Vocabulary, CastMember, DictionaryWord
 
 
 # ============================================
@@ -440,3 +440,10 @@ class VocabularyAdmin(admin.ModelAdmin):
 @admin.register(CastMember)
 class CastMemberAdmin(admin.ModelAdmin):
     list_display = ['name', 'role', 'content', 'order']
+
+
+@admin.register(DictionaryWord)
+class DictionaryWordAdmin(admin.ModelAdmin):
+    list_display = ['word', 'word_type', 'meaning_tr', 'level']
+    list_filter = ['level', 'word_type']
+    search_fields = ['word', 'meaning_tr', 'definition_en']
